@@ -1,15 +1,26 @@
+process.loadEnvFile()
 const express = require('express');
+const bodyParser = require('body-parser');
+const sequelize = require('./conexion/database.js');
 const app = express();
-const contenidoRoutes = require('./routes/contenidoRoutes');
-const db = require('./conexion/database');
+const PORT = process.env.PORT || 3006;
+const contenidoRoutes = require('./routes/contenidoRoutes.js');
+const setupSwagger = require('./swaggerConfig.js');
+setupSwagger(app);
 
 // Middlewares
+app.use(bodyParser.json());
 app.use(express.json());
-app.use('/contenido', contenidoRoutes);
+app.use('/api', contenidoRoutes);
 
-// Server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+
+sequelize.sync({ force: false }).then(() => {
+  console.log("Base de datos y tablas creadas!");
+}).catch(error => {
+  console.error("Error al sincronizar las tablas:", error);
 });
-    
+// Server
+app.listen(PORT, () => {
+  console.log(`Server corriendo en http://localhost:${PORT}`);
+  console.log(`Documentación en:http://localhost:${PORT}/api-docs`);
+});

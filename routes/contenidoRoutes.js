@@ -1,27 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../conexion/database');
+const contenidoController = require('../controllers/contenidoController');
 
-// Routes for CRUD
-router.get('/', (req, res) => {
-    // Get all content
-});
 
-router.get('/:id', (req, res) => {
-    // Get content by ID
-});
-
-router.post('/', (req, res) => {
-    // Add new content
-});
-
-router.put('/:id', (req, res) => {
-    // Update content by ID
-});
-
-router.delete('/:id', (req, res) => {
-    // Delete content by ID
-});
+router.get('/', (req, res) => res.send('¡Bienvenido a la API de Trailerflix!'));
+router.get('/contenidos', contenidoController.getContenidos);
+router.get('/contenido/:id', contenidoController.getContenidoById);
+router.get('/contenidos/filtrar', contenidoController.filterContenidos);
+router.post('/contenido', contenidoController.createContenido);
+router.put('/contenido/:id', contenidoController.updateContenido);
+router.delete('/contenido/:id', contenidoController.deleteContenido);
 
 module.exports = router;
-    
